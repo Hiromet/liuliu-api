@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Clients } from './clients.entity';
 
 @Injectable()
@@ -10,26 +10,32 @@ export class ClientsService {
     private readonly clientsRepository: Repository<Clients>,
   ) {}
 
-  findAll(
+  async findAll(
     pageNumber: number,
     pageSize: number,
     search?: string,
-  ): Promise<Clients[]> {
-    const whereClause = search
-      ? [
-          { firstname: Like(`%${search}%`) },
-          { lastname: Like(`%${search}%`) },
-          { district: Like(`%${search}%`) },
-          { email: Like(`%${search}%`) },
-        ]
-      : undefined;
+  ): Promise<{ count: number; results: Clients[] }> {
+    const query = this.clientsRepository.createQueryBuilder('client');
 
-    return this.clientsRepository.find({
-      where: whereClause,
-      order: { id: 'ASC' },
-      skip: (pageNumber - 1) * pageSize,
-      take: pageSize,
-    });
+    if (search) {
+      query
+        .where('client.firstname LIKE :search', { search: `%${search}%` })
+        .orWhere('client.lastname LIKE :search', { search: `%${search}%` })
+        .orWhere('client.district LIKE :search', { search: `%${search}%` })
+        .orWhere('client.email LIKE :search', { search: `%${search}%` });
+    }
+
+    query
+      .orderBy('client.id', 'ASC')
+      .skip((pageNumber - 1) * pageSize)
+      .take(pageSize);
+
+    const [results, count] = await query.getManyAndCount();
+
+    console.log('Count:', count);
+    console.log('Results:', results);
+
+    return { count, results };
   }
 
   findOne(id: number): Promise<Clients> {
