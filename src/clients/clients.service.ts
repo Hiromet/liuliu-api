@@ -10,7 +10,11 @@ export class ClientsService {
     private readonly clientsRepository: Repository<Clients>,
   ) {}
 
-  findAll(search?: string): Promise<Clients[]> {
+  findAll(
+    pageNumber: number,
+    pageSize: number,
+    search?: string,
+  ): Promise<Clients[]> {
     const whereClause = search
       ? [
           { firstname: Like(`%${search}%`) },
@@ -23,6 +27,8 @@ export class ClientsService {
     return this.clientsRepository.find({
       where: whereClause,
       order: { id: 'ASC' },
+      skip: (pageNumber - 1) * pageSize,
+      take: pageSize,
     });
   }
 

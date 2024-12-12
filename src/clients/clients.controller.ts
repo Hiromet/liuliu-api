@@ -16,8 +16,17 @@ export class ClientsController {
   constructor(private readonly clientsService: ClientsService) {}
 
   @Get()
-  findAll(@Query('search') search?: string): Promise<Clients[]> {
-    return this.clientsService.findAll(search);
+  findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+    @Query('search') search?: string,
+  ): Promise<Clients[]> {
+    const pageNumber = Number(page) || 1;
+    const pageSize = Number(limit) || 10;
+    console.log(
+      `Fetching clients - Page: ${pageNumber}, Limit: ${pageSize}, Search: ${search}`,
+    );
+    return this.clientsService.findAll(pageNumber, pageSize, search);
   }
 
   @Get(':id')
