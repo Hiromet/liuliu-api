@@ -8,6 +8,7 @@ import { ProductsModule } from './products/products.module';
 import { Products } from './products/products.entity';
 import { ProductsCategoryModule } from './products_category/products_category.module';
 import { ProductsCategory } from './products_category/products_category.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ProductsCategory } from './products_category/products_category.entity';
     ProductsModule,
     DistrictsModule,
     ProductsCategoryModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
