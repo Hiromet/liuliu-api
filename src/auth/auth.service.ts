@@ -15,6 +15,7 @@ export class AuthService {
       );
 
       return { access: newAccessToken };
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new UnauthorizedException('Invalid refresh token');
     }
