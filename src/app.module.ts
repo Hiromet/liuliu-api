@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { DistrictsModule } from './districts/districts.module';
 import { ClientsModule } from './clients/clients.module';
 import { Clients } from './clients/clients.entity';
 import { ProductsModule } from './products/products.module';
@@ -30,6 +31,7 @@ import { ProductsCategory } from './products_category/products_category.entity';
     }),
     ClientsModule,
     ProductsModule,
+    DistrictsModule,
     ProductsCategoryModule,
   ],
 })
