@@ -2,8 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ClientsModule } from './clients/clients.module';
-import { DistrictsModule } from './districts/districts.module';
 import { Clients } from './clients/clients.entity';
+import { ProductsModule } from './products/products.module';
+import { Products } from './products/products.entity';
+import { ProductsCategoryModule } from './products_category/products_category.module';
+import { ProductsCategory } from './products_category/products_category.entity';
 
 @Module({
   imports: [
@@ -16,7 +19,7 @@ import { Clients } from './clients/clients.entity';
         username: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
-        entities: [Clients],
+        entities: [Clients, Products, ProductsCategory],
         autoLoadEntities: true,
         ssl: {
           rejectUnauthorized: false,
@@ -26,7 +29,8 @@ import { Clients } from './clients/clients.entity';
       }),
     }),
     ClientsModule,
-    DistrictsModule,
+    ProductsModule,
+    ProductsCategoryModule,
   ],
 })
 export class AppModule {}
