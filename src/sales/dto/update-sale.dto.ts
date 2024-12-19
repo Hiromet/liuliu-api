@@ -1,4 +1,3 @@
-export class UpdateSaleDto {
-  payment_status?: string;
-  delivery_status?: string;
-}
+import { CreateSaleDto } from './create-sale.dto';
+
+export type UpdateSaleDto = Partial<CreateSaleDto>;
