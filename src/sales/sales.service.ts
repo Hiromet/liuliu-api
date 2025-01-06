@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Sale } from './sales.entity';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
@@ -25,8 +25,60 @@ export class SalesService {
     return this.salesRepository.save(newSale);
   }
 
-  async findAll() {
-    return this.salesRepository.find({ relations: ['client', 'products'] });
+  async findAll({
+    search,
+    page,
+    limit,
+  }: {
+    search?: string;
+    page: number;
+    limit: number;
+  }) {
+    const offset = (page - 1) * limit;
+
+    const [sales, total] = await this.salesRepository.findAndCount({
+      relations: ['client', 'products'],
+      where: search
+        ? [
+            { client: { firstname: Like(`%${search}%`) } },
+            { client: { lastname: Like(`%${search}%`) } },
+          ]
+        : {},
+      take: limit,
+      skip: offset,
+    });
+
+    const results = sales.map((sale) => {
+      const total = sale.products.reduce(
+        (sum, product) => sum + Number(product.price),
+        0,
+      );
+
+      return {
+        order_id: sale.order_id,
+        created_at: sale.created_at,
+        payment_status: sale.payment_status,
+        delivery_status: sale.delivery_status,
+        client: {
+          id: sale.client.id,
+          firstname: sale.client.firstname,
+          lastname: sale.client.lastname,
+          phone_number: sale.client.phone_number,
+          email: sale.client.email,
+        },
+        products: sale.products.map((product) => ({
+          id: product.id,
+          product_name: product.product_name,
+          price: product.price,
+        })),
+        total: total.toFixed(2),
+      };
+    });
+
+    return {
+      count: total,
+      results,
+    };
   }
 
   async findById(id: string) {
