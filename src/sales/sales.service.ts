@@ -1,22 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Sale } from './sales.entity';
-import { Products } from '../products/products.entity';
-import { Clients } from '../clients/clients.entity';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
-import { PDFDocument, rgb } from 'pdf-lib';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as puppeteer from 'puppeteer';
 
 @Injectable()
 export class SalesService {
   constructor(
     @InjectRepository(Sale)
     private readonly salesRepository: Repository<Sale>,
-    @InjectRepository(Products)
-    private readonly productsRepository: Repository<Products>,
-    @InjectRepository(Clients)
-    private readonly clientsRepository: Repository<Clients>,
   ) {}
 
   async create(createSaleDto: CreateSaleDto) {
@@ -44,8 +40,8 @@ export class SalesService {
       relations: ['client', 'products'],
       where: search
         ? [
-            { client: { firstname: Like(`%${search}%`) } },
-            { client: { lastname: Like(`%${search}%`) } },
+            { client: { firstname: `%${search}%` } },
+            { client: { lastname: `%${search}%` } },
           ]
         : {},
       take: limit,
@@ -113,58 +109,51 @@ export class SalesService {
 
   async generatePdf(id: string): Promise<Buffer> {
     const sale = await this.findById(id);
-    const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage([600, 800]);
-    const { height } = page.getSize();
 
-    let yPosition = height - 50;
+    const templatePath = path.resolve(__dirname, 'template', 'receipt.html');
+    const templateHtml = fs.readFileSync(templatePath, 'utf8');
 
-    page.drawText('Sale Receipt', { x: 200, y: yPosition, size: 20, color: rgb(0, 0.5, 0) });
+    const populatedHtml = templateHtml
+      .replace('{{order_id}}', sale.order_id)
+      .replace('{{created_at}}', new Date(sale.created_at).toLocaleDateString())
+      .replace(
+        '{{client_name}}',
+        `${sale.client.firstname} ${sale.client.lastname}`,
+      )
+      .replace(
+        '{{client_address}}',
+        `${sale.client.address || ''}, ${sale.client.district}`,
+      )
+      .replace('{{client_phone}}', sale.client.phone_number)
+      .replace('{{client_email}}', sale.client.email)
+      .replace(
+        '{{products}}',
+        sale.products
+          .map(
+            (product) => `
+        <tr>
+          <td>${product.product_name}</td>
+          <td>${product.quantity}</td>
+          <td>S/${product.price}</td>
+          <td>S/${(product.quantity * Number(product.price)).toFixed(2)}</td>
+        </tr>`,
+          )
+          .join(''),
+      )
+      .replace('{{subtotal}}', `S/${sale.total}`)
+      .replace('{{tax}}', 'S/0')
+      .replace('{{total}}', `S/${sale.total}`);
 
-    yPosition -= 40;
-    page.drawText('Order Summary', { x: 50, y: yPosition, size: 14, color: rgb(0, 0, 0) });
-    yPosition -= 20;
-    page.drawText(`Order ID: ${sale.order_id}`, { x: 50, y: yPosition, size: 12 });
-    yPosition -= 15;
-    page.drawText(`Date: ${new Date(sale.created_at).toString()}`, { x: 50, y: yPosition, size: 12 });
-    yPosition -= 15;
-    page.drawText(`Total: $${sale.total}`, { x: 50, y: yPosition, size: 12 });
-    yPosition -= 15;
-    page.drawText(`Payment Status: ${sale.payment_status}`, { x: 50, y: yPosition, size: 12 });
-    yPosition -= 15;
-    page.drawText(`Delivery Status: ${sale.delivery_status}`, { x: 50, y: yPosition, size: 12 });
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.setContent(populatedHtml, { waitUntil: 'domcontentloaded' });
 
-    yPosition -= 30;
-    page.drawText('Client Information', { x: 50, y: yPosition, size: 14, color: rgb(0, 0, 0) });
-    yPosition -= 20;
-    page.drawText(`Name: ${sale.client.firstname} ${sale.client.lastname}`, { x: 50, y: yPosition, size: 12 });
-    yPosition -= 15;
-    page.drawText(`Phone: ${sale.client.phone_number}`, { x: 50, y: yPosition, size: 12 });
-    yPosition -= 15;
-    page.drawText(`Email: ${sale.client.email}`, { x: 50, y: yPosition, size: 12 });
-    yPosition -= 15;
-    page.drawText(`Address: ${sale.client.address}`, { x: 50, y: yPosition, size: 12 });
+    const pdfUint8Array = await page.pdf({ format: 'A4' });
+    await browser.close();
 
-    yPosition -= 30;
-    page.drawText('Products', { x: 50, y: yPosition, size: 14, color: rgb(0, 0, 0) });
-    yPosition -= 20;
+    const pdfBuffer = Buffer.from(pdfUint8Array);
 
-    page.drawText('Product', { x: 50, y: yPosition, size: 12, color: rgb(0, 0, 0), underline: true });
-    page.drawText('Price', { x: 300, y: yPosition, size: 12, color: rgb(0, 0, 0), underline: true });
-    page.drawText('Quantity', { x: 400, y: yPosition, size: 12, color: rgb(0, 0, 0), underline: true });
-    yPosition -= 20;
-
-    sale.products.forEach((product) => {
-      page.drawText(product.product_name, { x: 50, y: yPosition, size: 12 });
-      page.drawText(`$${product.price}`, { x: 300, y: yPosition, size: 12 });
-      page.drawText(`${product.quantity}`, { x: 400, y: yPosition, size: 12 });
-      yPosition -= 20;
-    });
-
-    yPosition -= 30;
-    page.drawText(`Total: $${sale.total}`, { x: 50, y: yPosition, size: 14, color: rgb(0, 0, 0) });
-
-    const pdfBytes = await pdfDoc.save();
-    return Buffer.from(pdfBytes);
+    return pdfBuffer;
   }
+
 }

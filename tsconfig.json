@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "assets": [
+      { "include": "src/sales/template/**/*", "outDir": "dist/sales/template" }
+    ],
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
