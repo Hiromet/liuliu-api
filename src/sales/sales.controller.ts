@@ -7,7 +7,6 @@ import {
   Param,
   Body,
   Query,
-  Res,
 } from '@nestjs/common';
 import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/create-sale.dto';

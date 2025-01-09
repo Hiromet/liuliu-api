@@ -1,78 +1,88 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Sale } from './sales.entity';
-import { CreateSaleDto } from './dto/create-sale.dto';
-import { UpdateSaleDto } from './dto/update-sale.dto';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as puppeteer from 'puppeteer';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { ILike, Repository } from "typeorm";
+import { Sales } from "./sales.entity";
+import { SalesProducts } from "./sales-products.entity";
+import { CreateSaleDto } from "./dto/create-sale.dto";
+import { UpdateSaleDto } from "./dto/update-sale.dto";
 
 @Injectable()
 export class SalesService {
   constructor(
-    @InjectRepository(Sale)
-    private readonly salesRepository: Repository<Sale>,
+    @InjectRepository(Sales)
+    private readonly salesRepository: Repository<Sales>,
+    @InjectRepository(SalesProducts)
+    private readonly salesProductsRepository: Repository<SalesProducts>
   ) {}
 
   async create(createSaleDto: CreateSaleDto) {
-    const products = createSaleDto.products_ids.map((id) => ({ id }));
-    const newSale = this.salesRepository.create({
-      client: { id: createSaleDto.client_id },
-      products: products,
-      payment_status: createSaleDto.payment_status || 'pending',
-      delivery_status: createSaleDto.delivery_status || 'pending',
+    const sale = this.salesRepository.create({
+      client: { id: Number(createSaleDto.client_id) },
+      payment_status: createSaleDto.payment_status || "pending",
+      delivery_status: createSaleDto.delivery_status || "pending",
     });
-    //TODO: Set quantity in sales products
-    return this.salesRepository.save(newSale);
+
+    const savedSale = await this.salesRepository.save(sale);
+
+    const salesProductsData = createSaleDto.products.map((prod) =>
+      this.salesProductsRepository.create({
+        sale: savedSale,
+        product: { id: Number(prod.id) },
+        quantity: prod.quantity,
+      })
+    );
+
+    await this.salesProductsRepository.save(salesProductsData);
+    return this.findById(savedSale.order_id);
   }
 
   async findAll({
-    search,
-    page,
-    limit,
-  }: {
+                  search,
+                  page,
+                  limit,
+                }: {
     search?: string;
     page: number;
     limit: number;
   }) {
-    const offset = (page - 1) * limit;
     const [sales, total] = await this.salesRepository.findAndCount({
-      relations: ['client', 'products'],
+      relations: ["client", "salesProducts", "salesProducts.product"],
       where: search
         ? [
-            { client: { firstname: `%${search}%` } },
-            { client: { lastname: `%${search}%` } },
-          ]
+          { client: { firstname: ILike(`%${search}%`) } },
+          { client: { lastname: ILike(`%${search}%`) } },
+        ]
         : {},
       take: limit,
-      skip: offset,
+      skip: (page - 1) * limit,
     });
-    const results = sales.map((sale) => {
-      const total = sale.products.reduce(
-        (sum, product) => sum + Number(product.price),
-        0,
-      );
-      return {
-        order_id: sale.order_id,
-        created_at: sale.created_at,
-        payment_status: sale.payment_status,
-        delivery_status: sale.delivery_status,
-        client: {
-          id: sale.client.id,
-          firstname: sale.client.firstname,
-          lastname: sale.client.lastname,
-          phone_number: sale.client.phone_number,
-          email: sale.client.email,
-        },
-        products: sale.products.map((product) => ({
-          id: product.id,
-          product_name: product.product_name,
-          price: product.price,
-        })),
-        total: total.toFixed(2),
-      };
-    });
+
+    const results = sales.map((sale) => ({
+      order_id: sale.order_id,
+      created_at: sale.created_at,
+      payment_status: sale.payment_status,
+      delivery_status: sale.delivery_status,
+      client: {
+        id: sale.client.id,
+        firstname: sale.client.firstname,
+        lastname: sale.client.lastname,
+        phone_number: sale.client.phone_number,
+        email: sale.client.email,
+      },
+      products: sale.salesProducts.map((sp) => ({
+        id: sp.product.id,
+        product_name: sp.product.product_name,
+        price: sp.product.price,
+        quantity: sp.quantity,
+      })),
+      total: sale.salesProducts
+        .reduce(
+          (sum, sp) => sum + Number(sp.product.price) * sp.quantity,
+          0
+        )
+        .toFixed(2),
+    }));
+
     return {
       count: total,
       results,
@@ -82,22 +92,51 @@ export class SalesService {
   async findById(id: string) {
     const sale = await this.salesRepository.findOne({
       where: { order_id: id },
-      relations: ['client', 'products'],
+      relations: ["client", "salesProducts", "salesProducts.product"],
     });
+
     if (!sale) {
       throw new NotFoundException(`Sale with ID ${id} not found`);
     }
-    const total = sale.products.reduce(
-      (sum, product) => sum + Number(product.price),
-      0,
-    );
-    return { ...sale, total: total.toFixed(2) };
+
+    return {
+      ...sale,
+      total: sale.salesProducts
+        .reduce(
+          (sum, sp) => sum + Number(sp.product.price) * sp.quantity,
+          0
+        )
+        .toFixed(2),
+    };
   }
 
   async update(id: string, updateSaleDto: UpdateSaleDto) {
     const sale = await this.findById(id);
-    const updatedSale = Object.assign(sale, updateSaleDto);
-    return this.salesRepository.save(updatedSale);
+
+    if (updateSaleDto.payment_status) {
+      sale.payment_status = updateSaleDto.payment_status;
+    }
+    if (updateSaleDto.delivery_status) {
+      sale.delivery_status = updateSaleDto.delivery_status;
+    }
+
+    if (updateSaleDto.products) {
+      await this.salesProductsRepository.delete({
+        sale: { order_id: sale.order_id },
+      });
+
+      const newSalesProducts = updateSaleDto.products.map((prod) =>
+        this.salesProductsRepository.create({
+          sale,
+          product: { id: Number(prod.id) },
+          quantity: prod.quantity,
+        })
+      );
+      await this.salesProductsRepository.save(newSalesProducts);
+    }
+
+    await this.salesRepository.save(sale);
+    return this.findById(id);
   }
 
   async delete(id: string) {
@@ -105,7 +144,7 @@ export class SalesService {
     if (result.affected === 0) {
       throw new NotFoundException(`Sale with ID ${id} not found`);
     }
-    return { message: 'Sale deleted successfully' };
+    return { message: "Sale deleted successfully" };
   }
 
   // async generatePdf(id: string): Promise<Buffer> {

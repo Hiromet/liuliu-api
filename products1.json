@@ -1,0 +1,308 @@
+[
+  {
+    "product_name": "TORTA DE CHOCOLATE PORCION",
+    "description": "Delicioso TORTA DE CHOCOLATE PORCION ideal para cualquier ocasión.",
+    "price": "7",
+    "category": 1
+  },
+  {
+    "product_name": "TORTA DE CHOCOLATE MINI",
+    "description": "Delicioso TORTA DE CHOCOLATE MINI ideal para cualquier ocasión.",
+    "price": "40",
+    "category": 1
+  },
+  {
+    "product_name": "TORTA DE CHOCOLATE MEDIANA",
+    "description": "Delicioso TORTA DE CHOCOLATE MEDIANA ideal para cualquier ocasión.",
+    "price": "65",
+    "category": 1
+  },
+  {
+    "product_name": "TORTA DE CHOCOLATE GRANDE",
+    "description": "Delicioso TORTA DE CHOCOLATE GRANDE ideal para cualquier ocasión.",
+    "price": "70",
+    "category": 1
+  },
+  {
+    "product_name": "TORTA DE CORAZON",
+    "description": "Delicioso TORTA DE CORAZON ideal para cualquier ocasión.",
+    "price": "70",
+    "category": 1
+  },
+  {
+    "product_name": "TORTA DE CHOCOLATE HUMEDA Y MODERNA",
+    "description": "Delicioso TORTA DE CHOCOLATE HUMEDA Y MODERNA ideal para cualquier ocasión.",
+    "price": "80",
+    "category": 1
+  },
+  {
+    "product_name": "TORTA DE CHOCOLARE EXTRA GRANDE",
+    "description": "Delicioso TORTA DE CHOCOLARE EXTRA GRANDE ideal para cualquier ocasión.",
+    "price": "130",
+    "category": 1
+  },
+  {
+    "product_name": "TORTA DE VAINILLA",
+    "description": "Delicioso TORTA DE VAINILLA ideal para cualquier ocasión.",
+    "price": "65",
+    "category": 1
+  },
+  {
+    "product_name": "TORTA DE VAINILLA CON FRESAS",
+    "description": "Delicioso TORTA DE VAINILLA CON FRESAS ideal para cualquier ocasión.",
+    "price": "65",
+    "category": 1
+  },
+  {
+    "product_name": "TORTA 3 LECHES",
+    "description": "Delicioso TORTA 3 LECHES ideal para cualquier ocasión.",
+    "price": "65",
+    "category": 1
+  },
+  {
+    "product_name": "CARROT CAKE",
+    "description": "Delicioso CARROT CAKE ideal para cualquier ocasión.",
+    "price": "70",
+    "category": 1
+  },
+  {
+    "product_name": "KEKE DE VAINILLA MEDIANO",
+    "description": "Delicioso KEKE DE VAINILLA MEDIANO ideal para cualquier ocasión.",
+    "price": "20",
+    "category": 1
+  },
+  {
+    "product_name": "KEKE DE VAINILLA GRANDE",
+    "description": "Delicioso KEKE DE VAINILLA GRANDE ideal para cualquier ocasión.",
+    "price": "25",
+    "category": 1
+  },
+  {
+    "product_name": "KEKE INGLES MEDIANO",
+    "description": "Delicioso KEKE INGLES MEDIANO ideal para cualquier ocasión.",
+    "price": "30",
+    "category": 1
+  },
+  {
+    "product_name": "KEKE INGLES GRANDE",
+    "description": "Delicioso KEKE INGLES GRANDE ideal para cualquier ocasión.",
+    "price": "30",
+    "category": 1
+  },
+  {
+    "product_name": "CARROT CAKE MOLDE MEDIANO",
+    "description": "Delicioso CARROT CAKE MOLDE MEDIANO ideal para cualquier ocasión.",
+    "price": "30",
+    "category": 1
+  },
+  {
+    "product_name": "CARROT CAKE MOLDE GRANDE",
+    "description": "Delicioso CARROT CAKE MOLDE GRANDE ideal para cualquier ocasión.",
+    "price": "35",
+    "category": 1
+  },
+  {
+    "product_name": "TORTA DE CARROT CAKE MEDIANA",
+    "description": "Delicioso TORTA DE CARROT CAKE MEDIANA ideal para cualquier ocasión.",
+    "price": "50",
+    "category": 1
+  },
+  {
+    "product_name": "TORTA DE CARROT CAKE GRANDE",
+    "description": "Delicioso TORTA DE CARROT CAKE GRANDE ideal para cualquier ocasión.",
+    "price": "70",
+    "category": 1
+  },
+  {
+    "product_name": "CHEESCAKE DE FRESA MEDIANO",
+    "description": "Delicioso CHEESCAKE DE FRESA MEDIANO ideal para cualquier ocasión.",
+    "price": "65",
+    "category": 1
+  },
+  {
+    "product_name": "CHEESCAKE DE FRESA GRANDE",
+    "description": "Delicioso CHEESCAKE DE FRESA GRANDE ideal para cualquier ocasión.",
+    "price": "120",
+    "category": 1
+  },
+  {
+    "product_name": "CHEESCAKE DE MARACUYA MEDIANO",
+    "description": "Delicioso CHEESCAKE DE MARACUYA MEDIANO ideal para cualquier ocasión.",
+    "price": "65",
+    "category": 1
+  },
+  {
+    "product_name": "CHEESCAKE DE MARACUYA GRANDE",
+    "description": "Delicioso CHEESCAKE DE MARACUYA GRANDE ideal para cualquier ocasión.",
+    "price": "120",
+    "category": 1
+  },
+  {
+    "product_name": "CHEESCAKE DE ARANDANOS MEDIANO",
+    "description": "Delicioso CHEESCAKE DE ARANDANOS MEDIANO ideal para cualquier ocasión.",
+    "price": "65",
+    "category": 1
+  },
+  {
+    "product_name": "CHEESCAKE DE ARANDANOS GRANDE",
+    "description": "Delicioso CHEESCAKE DE ARANDANOS GRANDE ideal para cualquier ocasión.",
+    "price": "120",
+    "category": 1
+  },
+  {
+    "product_name": "CHEESCAKE DE ARANDANOS CON FRUTOS ROJOS MEDIANO",
+    "description": "Delicioso CHEESCAKE DE ARANDANOS CON FRUTOS ROJOS MEDIANO ideal para cualquier ocasión.",
+    "price": "70",
+    "category": 1
+  },
+  {
+    "product_name": "CHEESCAKE DE ARANDANOS CON FRUTOS ROJOS GRANDE",
+    "description": "Delicioso CHEESCAKE DE ARANDANOS CON FRUTOS ROJOS GRANDE ideal para cualquier ocasión.",
+    "price": "130",
+    "category": 1
+  },
+  {
+    "product_name": "TARTALETA DE FRESA INDIVIDUAL",
+    "description": "Delicioso TARTALETA DE FRESA INDIVIDUAL ideal para cualquier ocasión.",
+    "price": "7",
+    "category": 1
+  },
+  {
+    "product_name": "TARTALETA DE FRESA MEDIANA",
+    "description": "Delicioso TARTALETA DE FRESA MEDIANA ideal para cualquier ocasión.",
+    "price": "50",
+    "category": 1
+  },
+  {
+    "product_name": "TARTALETA DE FRESA GRANDE",
+    "description": "Delicioso TARTALETA DE FRESA GRANDE ideal para cualquier ocasión.",
+    "price": "55",
+    "category": 1
+  },
+  {
+    "product_name": "TARTALETA DE DURAZNO MEDIANA",
+    "description": "Delicioso TARTALETA DE DURAZNO MEDIANA ideal para cualquier ocasión.",
+    "price": "50",
+    "category": 1
+  },
+  {
+    "product_name": "TARTALETA DE DURAZNO GRANDE",
+    "description": "Delicioso TARTALETA DE DURAZNO GRANDE ideal para cualquier ocasión.",
+    "price": "55",
+    "category": 1
+  },
+  {
+    "product_name": "PYE DE MANZANA PORCION",
+    "description": "Delicioso PYE DE MANZANA PORCION ideal para cualquier ocasión.",
+    "price": "6",
+    "category": 1
+  },
+  {
+    "product_name": "PYE DE MANZANA",
+    "description": "Delicioso PYE DE MANZANA ideal para cualquier ocasión.",
+    "price": "45",
+    "category": 1
+  },
+  {
+    "product_name": "PYE DE MANZANA",
+    "description": "Delicioso PYE DE MANZANA ideal para cualquier ocasión.",
+    "price": "50",
+    "category": 1
+  },
+  {
+    "product_name": "PYE DE LIMON",
+    "description": "Delicioso PYE DE LIMON ideal para cualquier ocasión.",
+    "price": "7",
+    "category": 1
+  },
+  {
+    "product_name": "PYE DE LIMON MEDIANO",
+    "description": "Delicioso PYE DE LIMON MEDIANO ideal para cualquier ocasión.",
+    "price": "55",
+    "category": 1
+  },
+  {
+    "product_name": "PYE DE LIMON GRANDE",
+    "description": "Delicioso PYE DE LIMON GRANDE ideal para cualquier ocasión.",
+    "price": "60",
+    "category": 1
+  },
+  {
+    "product_name": "BROWNIES CAJA 12 UNI",
+    "description": "Delicioso BROWNIES CAJA 12 UNI ideal para cualquier ocasión.",
+    "price": "17",
+    "category": 1
+  },
+  {
+    "product_name": "BROWNIES CAJA 25 UNI",
+    "description": "Delicioso BROWNIES CAJA 25 UNI ideal para cualquier ocasión.",
+    "price": "30",
+    "category": 1
+  },
+  {
+    "product_name": "ALFAJORES MINI CAJA 25 UNI",
+    "description": "Delicioso ALFAJORES MINI CAJA 25 UNI ideal para cualquier ocasión.",
+    "price": "18",
+    "category": 1
+  },
+  {
+    "product_name": "ALFAJORES GRANDES CAJA 25 UNI",
+    "description": "Delicioso ALFAJORES GRANDES CAJA 25 UNI ideal para cualquier ocasión.",
+    "price": "22",
+    "category": 1
+  },
+  {
+    "product_name": "CUCHAREABLE DE ALFAJOR CON O SIN FRESAS",
+    "description": "Delicioso CUCHAREABLE DE ALFAJOR CON O SIN FRESAS ideal para cualquier ocasión.",
+    "price": "14",
+    "category": 1
+  },
+  {
+    "product_name": "CUCHAREABLE DE CHOCOLATE",
+    "description": "Delicioso CUCHAREABLE DE CHOCOLATE ideal para cualquier ocasión.",
+    "price": "14",
+    "category": 1
+  },
+  {
+    "product_name": "CUCHAREABLE DE CHOCOLUCUMA",
+    "description": "Delicioso CUCHAREABLE DE CHOCOLUCUMA ideal para cualquier ocasión.",
+    "price": "17",
+    "category": 1
+  },
+  {
+    "product_name": "CUCHAREABLE DE DE CHEESCAKE DE MARACUYA",
+    "description": "Delicioso CUCHAREABLE DE DE CHEESCAKE DE MARACUYA ideal para cualquier ocasión.",
+    "price": "15",
+    "category": 1
+  },
+  {
+    "product_name": "CUCHAREABLE DE CARROT CAKE",
+    "description": "Delicioso CUCHAREABLE DE CARROT CAKE ideal para cualquier ocasión.",
+    "price": "15",
+    "category": 1
+  },
+  {
+    "product_name": "CUCHAREABLE DE NARANJA",
+    "description": "Delicioso CUCHAREABLE DE NARANJA ideal para cualquier ocasión.",
+    "price": "12",
+    "category": 1
+  },
+  {
+    "product_name": "GALLETONES",
+    "description": "Delicioso GALLETONES ideal para cualquier ocasión.",
+    "price": "6",
+    "category": 1
+  },
+  {
+    "product_name": "CAJA DE GALLETONES DE 4 UNIDADES CON FOUDGE",
+    "description": "Delicioso CAJA DE GALLETONES DE 4 UNIDADES CON FOUDGE ideal para cualquier ocasión.",
+    "price": "22",
+    "category": 1
+  },
+  {
+    "product_name": "MINI TORTAS",
+    "description": "Delicioso MINI TORTAS ideal para cualquier ocasión.",
+    "price": "35",
+    "category": 1
+  }
+]
