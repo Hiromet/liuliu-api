@@ -38,9 +38,8 @@ export class ProductsService {
       id: product.id,
       product_name: product.product_name,
       description: product.description,
-      quantity: product.quantity,
       price: product.price,
-      category: product.category?.id,
+      category: product.category?.name,
     }));
 
     return { count, results: formattedResults };
@@ -65,7 +64,6 @@ export class ProductsService {
       id: product.id,
       product_name: product.product_name,
       description: product.description,
-      quantity: product.quantity,
       price: product.price,
       category: product.category?.id,
     };
