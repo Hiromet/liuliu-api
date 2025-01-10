@@ -5,6 +5,9 @@ import { Sales } from "./sales.entity";
 import { SalesProducts } from "./sales-products.entity";
 import { CreateSaleDto } from "./dto/create-sale.dto";
 import { UpdateSaleDto } from "./dto/update-sale.dto";
+import * as path from 'node:path';
+import * as fs from 'node:fs';
+import puppeteer from 'puppeteer';
 
 @Injectable()
 export class SalesService {
@@ -147,6 +150,7 @@ export class SalesService {
     return { message: "Sale deleted successfully" };
   }
 
+  //TODO: MAKE THIS WORK PROPERLY
   // async generatePdf(id: string): Promise<Buffer> {
   //   const sale = await this.findById(id);
   //

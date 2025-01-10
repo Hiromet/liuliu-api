@@ -44,7 +44,7 @@ export class SalesController {
   deleteSale(@Param('id') id: string) {
     return this.salesService.delete(id);
   }
-
+  //TODO: MAKE THIS WORK PROPERLY
   // @Get(':id/pdf')
   // async getSalePdf(@Param('id') id: string, @Res() res: Response) {
   //   const pdfBuffer = await this.salesService.generatePdf(id);
