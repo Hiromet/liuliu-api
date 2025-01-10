@@ -6,11 +6,13 @@ import {
   Delete,
   Param,
   Body,
-  Query,
+  Query, Res,
 } from '@nestjs/common';
 import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { UpdateSaleDto } from './dto/update-sale.dto';
+import { Response } from 'express';
+
 
 @Controller('sales')
 export class SalesController {
@@ -44,14 +46,14 @@ export class SalesController {
   deleteSale(@Param('id') id: string) {
     return this.salesService.delete(id);
   }
-  //TODO: MAKE THIS WORK PROPERLY
-  // @Get(':id/pdf')
-  // async getSalePdf(@Param('id') id: string, @Res() res: Response) {
-  //   const pdfBuffer = await this.salesService.generatePdf(id);
-  //   res.set({
-  //     'Content-Type': 'application/pdf',
-  //     'Content-Disposition': `attachment; filename=Sale-${id}.pdf`,
-  //   });
-  //   res.send(pdfBuffer);
-  // }
+
+  @Get(':id/pdf')
+  async getSalePdf(@Param('id') id: string, @Res() res: Response) {
+    const pdfBuffer = await this.salesService.generatePdf(id);
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=Sale-${id}.pdf`,
+    });
+    res.send(pdfBuffer);
+  }
 }

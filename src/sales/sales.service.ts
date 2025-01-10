@@ -150,54 +150,54 @@ export class SalesService {
     return { message: "Sale deleted successfully" };
   }
 
-  //TODO: MAKE THIS WORK PROPERLY
-  // async generatePdf(id: string): Promise<Buffer> {
-  //   const sale = await this.findById(id);
-  //
-  //   const templatePath = path.resolve(__dirname, 'template', 'receipt.html');
-  //   const templateHtml = fs.readFileSync(templatePath, 'utf8');
-  //
-  //   const populatedHtml = templateHtml
-  //     .replace('{{order_id}}', sale.order_id)
-  //     .replace('{{created_at}}', new Date(sale.created_at).toLocaleDateString())
-  //     .replace(
-  //       '{{client_name}}',
-  //       `${sale.client.firstname} ${sale.client.lastname}`,
-  //     )
-  //     .replace(
-  //       '{{client_address}}',
-  //       `${sale.client.address || ''}, ${sale.client.district}`,
-  //     )
-  //     .replace('{{client_phone}}', sale.client.phone_number)
-  //     .replace('{{client_email}}', sale.client.email)
-  //     .replace(
-  //       '{{products}}',
-  //       sale.products
-  //         .map(
-  //           (product) => `
-  //       <tr>
-  //         <td>${product.product_name}</td>
-  //         <td>${product.quantity}</td>
-  //         <td>S/${product.price}</td>
-  //         <td>S/${(product.quantity * Number(product.price)).toFixed(2)}</td>
-  //       </tr>`,
-  //         )
-  //         .join(''),
-  //     )
-  //     .replace('{{subtotal}}', `S/${sale.total}`)
-  //     .replace('{{tax}}', 'S/0')
-  //     .replace('{{total}}', `S/${sale.total}`);
-  //
-  //   const browser = await puppeteer.launch();
-  //   const page = await browser.newPage();
-  //   await page.setContent(populatedHtml, { waitUntil: 'domcontentloaded' });
-  //
-  //   const pdfUint8Array = await page.pdf({ format: 'A4' });
-  //   await browser.close();
-  //
-  //   const pdfBuffer = Buffer.from(pdfUint8Array);
-  //
-  //   return pdfBuffer;
-  // }
+  async generatePdf(id: string): Promise<Buffer> {
+    const sale = await this.findById(id);
+    if (!sale) throw new Error('Sale not found');
+
+    const templatePath = path.resolve(__dirname, 'template', 'receipt.html');
+    const templateHtml = fs.readFileSync(templatePath, 'utf8');
+
+    const populatedHtml = templateHtml
+      .replace('{{order_id}}', sale.order_id)
+      .replace('{{created_at}}', new Date(sale.created_at).toLocaleDateString())
+      .replace(
+        '{{client_name}}',
+        `${sale.client.firstname} ${sale.client.lastname}`,
+      )
+      .replace(
+        '{{client_address}}',
+        `${sale.client.address || 'N/A'}, ${sale.client.district || 'N/A'}`,
+      )
+      .replace('{{client_phone}}', sale.client.phone_number || 'N/A')
+      .replace('{{client_email}}', sale.client.email || 'N/A')
+      .replace(
+        '{{products}}',
+        sale.salesProducts
+          .map(
+            (product, quantity) => `
+      <tr>
+        <td>${product.product.product_name}</td>
+        <td>${product.quantity}</td>
+        <td>S/${product.product.price}</td>
+        <td>S/${(product.quantity * Number(product.product.price)).toFixed(2)}</td>
+      </tr>`,
+          )
+          .join(''),
+      )
+      .replace('{{subtotal}}', `S/${sale.total}`)
+      .replace('{{tax}}', 'S/0')
+      .replace('{{total}}', `S/${sale.total}`);
+
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
+    await page.setContent(populatedHtml, { waitUntil: 'domcontentloaded' });
+
+    const pdfUint8Array = await page.pdf({ format: 'A4' });
+    await browser.close();
+
+    const pdfBuffer = Buffer.from(pdfUint8Array);
+
+    return pdfBuffer;
+  }
 
 }
