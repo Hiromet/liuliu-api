@@ -155,7 +155,9 @@ export class SalesService {
     if (!sale) throw new Error('Sale not found');
 
     const templatePath = path.resolve(__dirname, 'template', 'receipt.html');
+    const b64ImagePath = path.resolve(__dirname, 'template', 'instagram.b64');
     const templateHtml = fs.readFileSync(templatePath, 'utf8');
+    const base64Image = fs.readFileSync(b64ImagePath, 'utf8');
 
     const populatedHtml = templateHtml
       .replace('{{order_id}}', sale.order_id)
@@ -186,7 +188,8 @@ export class SalesService {
       )
       .replace('{{subtotal}}', `S/${sale.total}`)
       .replace('{{tax}}', 'S/0')
-      .replace('{{total}}', `S/${sale.total}`);
+      .replace('{{total}}', `S/${sale.total}`)
+      .replace('{{base64_image}}', base64Image);
 
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();

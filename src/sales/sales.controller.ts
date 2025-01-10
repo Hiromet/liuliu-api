@@ -16,7 +16,8 @@ import { Response } from 'express';
 
 @Controller('sales')
 export class SalesController {
-  constructor(private readonly salesService: SalesService) {}
+  constructor(private readonly salesService: SalesService) {
+  }
 
   @Post()
   createSale(@Body() createSaleDto: CreateSaleDto) {
@@ -49,11 +50,16 @@ export class SalesController {
 
   @Get(':id/pdf')
   async getSalePdf(@Param('id') id: string, @Res() res: Response) {
-    const pdfBuffer = await this.salesService.generatePdf(id);
-    res.set({
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename=Sale-${id}.pdf`,
-    });
-    res.send(pdfBuffer);
+    try {
+      const pdfBuffer = await this.salesService.generatePdf(id);
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename=Sale-${id}.pdf`,
+      });
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error('Error generating PDF:', error.message);
+      res.status(500).json({ message: 'Could not generate PDF', error: error.message });
+    }
   }
 }
